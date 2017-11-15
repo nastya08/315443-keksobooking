@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анастасия Иванова](https://up.htmlacademy.ru/javascript/11/user/315443).
-* Наставник: `Неизвестно`.
+* Наставник: [Екатерина Кащенко](https://up.htmlacademy.ru/javascript/11/user/109008).
 
 ---
 
