@@ -1,5 +1,6 @@
 'use strict';
 
+// Константы
 var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var MIN_PRICE = 1000;
 var MAX_PRICE = 1000000;
@@ -21,21 +22,38 @@ var OFFER_COORDINATES = {
 var PIN_WIDTH = 46;
 var PIN_HEIGHT = 62;
 var PIN_NUMBER = 8;
+// Количество fieldset внутри формы
+var NUMBERS_FIELDSET = document.querySelector('.notice__form').getElementsByTagName('FIELDSET').length;
+// Клавиши
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
+// Переменные
+// Объект для перевода типов жилья
 var offerTypeTranslate = {
   flat: 'Квартира',
   house: 'Дом',
   bungalo: 'Бунгало'
 };
-
+// Карта
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// Список меток
 var mapPins = document.querySelector('.map__pins');
+// Часть шаблока - метка
 var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+// Часть шаблона - карточка
 var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-
+// Массив объектов недвижимости
 var ads = [];
+// Фрагмент
+var fragment = document.createDocumentFragment();
+// Форма
+var form = document.querySelector('.notice__form');
+// Центральная метка
+var mainPin = map.querySelector('.map__pin--main');
 
+// Функции
+// Получение случайного целого значения
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -45,6 +63,7 @@ var generatePartArray = function (array) {
   return array.splice(index, 1);
 };
 
+// Формирование массива удобств
 var generateFeatures = function () {
   var newOfferFeatures = [];
   var offerFeatures = OFFER_FEATURES.slice();
@@ -57,13 +76,13 @@ var generateFeatures = function () {
   return newOfferFeatures;
 };
 
+// Формирование массива объектов недвижимости
 var getRandomAds = function () {
   for (var i = 0; i < PIN_NUMBER; i++) {
     ads.push({
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
-
       offer: {
         title: generatePartArray(OFFER_TITLES),
         adress: getRandomNumber(OFFER_COORDINATES.x.min, OFFER_COORDINATES.x.max) + ', ' + getRandomNumber(OFFER_COORDINATES.y.min, OFFER_COORDINATES.y.max),
@@ -77,7 +96,6 @@ var getRandomAds = function () {
         description: '',
         photos: []
       },
-
       location: {
         x: getRandomNumber(OFFER_COORDINATES.x.min, OFFER_COORDINATES.x.max),
         y: getRandomNumber(OFFER_COORDINATES.y.min, OFFER_COORDINATES.y.max)
@@ -87,6 +105,7 @@ var getRandomAds = function () {
   return ads;
 };
 
+// Получение удобств
 var getFeatureElements = function (features) {
   var featureElements = '';
   for (var i = 0; i <= features.length - 1; i++) {
@@ -95,16 +114,19 @@ var getFeatureElements = function (features) {
   return featureElements;
 };
 
-var renderPin = function (ad) {
+// Формирование метки
+var renderPin = function (ad, num) {
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
   mapPinElement.style.left = ad.location.x + PIN_WIDTH / 2 + 'px';
   mapPinElement.style.top = ad.location.y + PIN_HEIGHT + 'px';
   mapPinElement.querySelector('img').src = ad.author.avatar;
+  mapPinElement.dataset.num = num;
 
   return mapPinElement;
 };
 
+// Формирование карточки
 var renderAd = function (ad) {
   var mapCardElement = mapCardTemplate.cloneNode(true);
 
@@ -121,15 +143,104 @@ var renderAd = function (ad) {
   return mapCardElement;
 };
 
+// Добавление меток на страницу
 var insertAd = function () {
-  var fragment = document.createDocumentFragment();
-
   getRandomAds();
   for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderPin(ads[i]));
-    fragment.appendChild(renderAd(ads[i]));
+    fragment.appendChild(renderPin(ads[i], i));
   }
-  mapPins.appendChild(fragment);
+};
+insertAd();
+
+// Все поля формы при открытии страницы недоступны, disabled
+var disableFieldset = function () {
+  for (var i = 0; i < NUMBERS_FIELDSET; i++) {
+    form.querySelectorAll('fieldset')[i].disabled = true;
+  }
+};
+disableFieldset();
+
+// Все поля формы становятся доступными
+var ableFieldset = function () {
+  for (var i = 0; i < NUMBERS_FIELDSET; i++) {
+    form.querySelectorAll('fieldset')[i].disabled = false;
+  }
 };
 
-insertAd();
+// Функция активации карты
+var activateMap = function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('notice__form--disabled');
+  mapPins.appendChild(fragment);
+  ableFieldset();
+  mainPin.classList.remove('map__pin--active');
+  mainPin.classList.add('hidden');
+};
+
+// Акцивация формы и карты при событии mouseup и ENTER
+mainPin.addEventListener('mouseup', function () {
+  activateMap();
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    activateMap();
+  }
+});
+
+// Закрытие окна на ESC
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+// Функция - закрытие попапа
+var closePopup = function () {
+  var card = mapPins.querySelector('.popup');
+  mapPins.removeChild(card);
+  mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// Функция - открытие попапа
+var openPopup = function (evt) {
+  var target = evt.target.closest('.map__pin');
+  if (target && !target.classList.contains('map__pin--main')) {
+    // Был ли до этого pin--active? Если да, удалить map__pin--active
+    if (mapPins.querySelector('.map__pin--active')) {
+      mapPins.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    }
+    // Добавление класса map__pin--active
+    target.classList.add('map__pin--active');
+    // Была ли открытая карточка? Если да, удаляем
+    if (mapPins.querySelector('.popup')) {
+      var card = mapPins.querySelector('.popup');
+      mapPins.removeChild(card);
+    }
+    // Вставить объявление .popup
+    var insertCard = function () {
+      var index = target.dataset.num;
+      fragment.appendChild(renderAd(ads[index]));
+      mapPins.appendChild(fragment);
+    };
+    insertCard();
+    // Скрыть .popup и удалить map__pin--active у этого элемента
+    var buttonClose = map.querySelector('.popup__close');
+    buttonClose.addEventListener('click', function () {
+      closePopup();
+    });
+    document.addEventListener('keydown', onPopupEscPress);
+  }
+};
+
+// Событие - открытие карточки
+mapPins.addEventListener('click', function (evt) {
+  openPopup(evt);
+});
+
+mapPins.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup(evt);
+  }
+});
