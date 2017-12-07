@@ -254,6 +254,7 @@ var formTitle = form.querySelector('#title');
 var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
 var roomOptionsNumber = roomNumber.options.length;
+var address = form.querySelector('#address');
 
 var offerTypePrice = {
   flat: 1000,
@@ -342,6 +343,9 @@ var onBlurTitle = function (evt) {
 var onFocusTitle = function (evt) {
   removeBorderColor(evt.target);
 };
+
+// Вставка адреса (временно)
+address.value = 'Адрес';
 
 // Валидация цены
 var onInvalidPrice = function () {
