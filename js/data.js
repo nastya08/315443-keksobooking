@@ -38,14 +38,18 @@
   // Формирование массива объектов недвижимости
     getRandomAds: function () {
       var ads = [];
-      for (var i = 0; i < window.pinNumber; i++) {
+
+      for (var i = 0; i < window.PIN_NUMBER; i++) {
+        var coordX = window.util.getRandomNumber(OFFER_COORDINATES.x.min, OFFER_COORDINATES.x.max);
+        var coordY = window.util.getRandomNumber(OFFER_COORDINATES.y.min, OFFER_COORDINATES.y.max);
+
         ads.push({
           author: {
             avatar: 'img/avatars/user0' + (i + 1) + '.png'
           },
           offer: {
             title: window.util.generatePartArray(OFFER_TITLES),
-            adress: window.util.getRandomNumber(OFFER_COORDINATES.x.min, OFFER_COORDINATES.x.max) + ', ' + window.util.getRandomNumber(OFFER_COORDINATES.y.min, OFFER_COORDINATES.y.max),
+            adress: coordX + ', ' + coordY,
             price: window.util.getRandomNumber(MIN_PRICE, MAX_PRICE),
             type: OFFER_TYPES[window.util.getRandomNumber(0, OFFER_TYPES.length - 1)],
             rooms: window.util.getRandomNumber(1, MAX_ROOMS),
@@ -57,8 +61,8 @@
             photos: []
           },
           location: {
-            x: window.util.getRandomNumber(OFFER_COORDINATES.x.min, OFFER_COORDINATES.x.max),
-            y: window.util.getRandomNumber(OFFER_COORDINATES.y.min, OFFER_COORDINATES.y.max)
+            x: coordX,
+            y: coordY
           }
         });
       }

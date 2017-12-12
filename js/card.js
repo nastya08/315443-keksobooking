@@ -32,6 +32,7 @@
       mapCardElement.querySelector('h4').textContent = offerTypeTranslate[ad.offer.type];
       mapCardElement.querySelector('.popup__avatar').src = ad.author.avatar;
       mapCardElement.querySelector('.popup__features').innerHTML = getFeatureElements(ad.offer.features);
+      mapCardElement.querySelector('.popup__pictures').remove();
 
       return mapCardElement;
     }
