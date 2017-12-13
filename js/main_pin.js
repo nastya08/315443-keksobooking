@@ -38,7 +38,7 @@
         // Получение координат
         var finalCoords = {
           finalX: mainPin.offsetLeft,
-          finalY: Math.round(mainPin.offsetTop + window.MAIN_PIN_HEIGHT / 2 + window.MAIN_PIN_POINTER_HEIGHT - 8)
+          finalY: Math.round(mainPin.offsetTop + window.MAIN_PIN_HEIGHT / 2 + window.MAIN_PIN_POINTER_HEIGHT)
         };
         document.querySelector('#address').value = 'x: ' + finalCoords.finalX + ', y: ' + finalCoords.finalY;
       };
