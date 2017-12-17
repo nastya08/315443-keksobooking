@@ -16,7 +16,6 @@
   var capacity = form.querySelector('#capacity');
   var roomOptionsNumber = roomNumber.options.length;
   var address = form.querySelector('#address');
-
   var offerTypePrice = {
     flat: 1000,
     bungalo: 0,
@@ -32,19 +31,29 @@
   };
   disableFieldset();
 
+  var syncValues = function (element, value) {
+    element.value = value;
+  };
+
   // Функция - изменение времени выезда при изменении времени въезда
   var onSincTimeIn = function () {
-    timeOut.selectedIndex = timeIn.selectedIndex;
+    window.synchronizeFields(timeIn, timeOut, window.data.arrOfferChecks, window.data.arrOfferChecks, syncValues);
   };
 
   // Функция - изменение времени въезда при изменении времени выезда
   var onSincTimeOut = function () {
-    timeIn.selectedIndex = timeOut.selectedIndex;
+    window.synchronizeFields(timeOut, timeIn, window.data.arrOfferChecks, window.data.arrOfferChecks, syncValues);
+  };
+
+  var syncMinValues = function (element, value) {
+    element.min = value;
   };
 
   // Функция - изменение мин.стоимости при изменении типа жилья
   var onSincPrice = function () {
-    priceHome.min = offerTypePrice[typeHome.value];
+    var offerTypes = ['flat', 'bungalo', 'house', 'palace'];
+    var offerPrices = [1000, 0, 5000, 10000];
+    window.synchronizeFields(typeHome, priceHome, offerTypes, offerPrices, syncMinValues);
   };
 
   // Функция - изменение количества гостей при изменении количества комнат

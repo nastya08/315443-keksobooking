@@ -35,7 +35,8 @@
   };
 
   window.data = {
-  // Формирование массива объектов недвижимости
+    arrOfferChecks: OFFER_CHECKS.slice(),
+    // Формирование массива объектов недвижимости
     getRandomAds: function () {
       var ads = [];
 
