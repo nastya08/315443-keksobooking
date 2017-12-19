@@ -8,13 +8,6 @@
   // Центральная метка
   var mainPin = map.querySelector('.map__pin--main');
 
-  var hidePins = function () {
-    for (var i = 0; i < window.PIN_NUMBER; i++) {
-      mapPins.querySelectorAll('.map__pin')[i + 1].classList.add('hidden');
-    }
-  };
-  hidePins();
-
   var showPins = function () {
     for (var i = 0; i < window.PIN_NUMBER; i++) {
       mapPins.querySelectorAll('.map__pin')[i + 1].classList.remove('hidden');

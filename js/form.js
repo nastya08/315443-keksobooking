@@ -35,14 +35,16 @@
     element.value = value;
   };
 
+  var arrOfferChecks = ['12:00', '13:00', '14:00'];
+
   // Функция - изменение времени выезда при изменении времени въезда
   var onSincTimeIn = function () {
-    window.synchronizeFields(timeIn, timeOut, window.data.arrOfferChecks, window.data.arrOfferChecks, syncValues);
+    window.synchronizeFields(timeIn, timeOut, arrOfferChecks, arrOfferChecks, syncValues);
   };
 
   // Функция - изменение времени въезда при изменении времени выезда
   var onSincTimeOut = function () {
-    window.synchronizeFields(timeOut, timeIn, window.data.arrOfferChecks, window.data.arrOfferChecks, syncValues);
+    window.synchronizeFields(timeOut, timeIn, arrOfferChecks, arrOfferChecks, syncValues);
   };
 
   var syncMinValues = function (element, value) {
