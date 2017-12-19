@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.PIN_NUMBER = 8;
+  window.PIN_NUMBER = 5;
   window.ESC_KEYCODE = 27;
   window.ENTER_KEYCODE = 13;
   window.PIN_HEIGHT = 44;
