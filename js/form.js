@@ -23,7 +23,7 @@
     palace: 10000,
   };
 
-  // Все поля формы при открытии страницы недоступны, disabled
+  // Все поля формы при открытии страницы недоступны
   var disableFieldset = function () {
     for (var i = 0; i < NUMBERS_FIELDSET; i++) {
       form.querySelectorAll('fieldset')[i].disabled = true;
@@ -37,12 +37,12 @@
 
   var arrOfferChecks = ['12:00', '13:00', '14:00'];
 
-  // Функция - изменение времени выезда при изменении времени въезда
+  // изменение времени выезда при изменении времени въезда
   var onSincTimeIn = function () {
     window.synchronizeFields(timeIn, timeOut, arrOfferChecks, arrOfferChecks, syncValues);
   };
 
-  // Функция - изменение времени въезда при изменении времени выезда
+  // изменение времени въезда при изменении времени выезда
   var onSincTimeOut = function () {
     window.synchronizeFields(timeOut, timeIn, arrOfferChecks, arrOfferChecks, syncValues);
   };
@@ -51,14 +51,14 @@
     element.min = value;
   };
 
-  // Функция - изменение мин.стоимости при изменении типа жилья
+  // изменение мин.стоимости при изменении типа жилья
   var onSincPrice = function () {
     var offerTypes = ['flat', 'bungalo', 'house', 'palace'];
     var offerPrices = [1000, 0, 5000, 10000];
     window.synchronizeFields(typeHome, priceHome, offerTypes, offerPrices, syncMinValues);
   };
 
-  // Функция - изменение количества гостей при изменении количества комнат
+  // изменение количества гостей при изменении количества комнат
   var onSincCapacity = function () {
     for (var i = 0; i < roomOptionsNumber; i++) {
       capacity.options[i].classList.remove('hidden');
@@ -124,8 +124,8 @@
     removeBorderColor(evt.target);
   };
 
-  // Вставка адреса (временно)
-  address.value = 'Адрес';
+  // Вставка адреса центр
+  address.value = 'x: 600, y: 430';
 
   // Валидация цены
   var onInvalidPrice = function () {

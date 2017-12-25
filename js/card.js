@@ -9,7 +9,7 @@
     house: 'Дом',
     bungalo: 'Бунгало'
   };
-  // Получение удобств
+
   var getFeatureElements = function (features) {
     var featureElements = '';
     for (var i = 0; i <= features.length - 1; i++) {

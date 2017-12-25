@@ -9,4 +9,5 @@
   window.PIN_POINTER_HEIGHT = 18;
   window.MAIN_PIN_HEIGHT = 62;
   window.MAIN_PIN_POINTER_HEIGHT = 22;
+  window.DEBOUNCE_INTERVAL = 500;
 })();
