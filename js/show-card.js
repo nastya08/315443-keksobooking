@@ -40,6 +40,7 @@
         mapPins.appendChild(fragment);
       };
       insertCard();
+
       // Скрыть .popup и удалить map__pin--active у этого элемента
       var buttonClose = document.querySelector('.popup__close');
       buttonClose.addEventListener('click', function () {
@@ -60,5 +61,8 @@
     }
   });
 
-  window.showCard = showCard;
+  window.showCard = {
+    showCard: showCard,
+    closePopup: closePopup
+  };
 })();
