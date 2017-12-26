@@ -21,10 +21,17 @@
 
   var onLoadError = function (errorMessage) {
     var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; border: 2px solid black';
-    node.style.position = 'absolute';
+    node.style.position = 'fixed';
+    node.style.top = '40%';
     node.style.left = 0;
     node.style.right = 0;
+    node.style.zIndex = '100';
+    node.style.margin = '0 auto';
+    node.style.paddingTop = '100px';
+    node.style.height = '150px';
+    node.style.backgroundColor = 'white';
+    node.style.border = '5px solid red';
+    node.style.textAlign = 'center';
     node.style.fontSize = '30px';
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);

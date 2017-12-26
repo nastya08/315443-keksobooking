@@ -8,15 +8,11 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onLoad(xhr.response);
-      } else {
-        onError(xhr.response);
-      }
+      xhr.status === 200 ? onLoad(xhr.response) : onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произоша ошибка соединения');
+      onError('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
