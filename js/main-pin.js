@@ -1,14 +1,17 @@
 'use strict';
 
 (function () {
-  // Центральная метка
-  var mainPin = document.querySelector('.map__pin--main');
-
+  var MAIN_PIN_HEIGHT = 62;
+  var MAIN_PIN_POINTER_HEIGHT = 22;
   // Ограничения по высоте
   var COORDS_Y = {
     min: 100,
     max: 500
   };
+  var ENTER_KEYCODE = 13;
+
+  // Центральная метка
+  var mainPin = document.querySelector('.map__pin--main');
 
   var dragPinMain = function () {
     mainPin.addEventListener('mousedown', function (evt) {
@@ -31,14 +34,14 @@
         };
 
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-        if ((mainPin.offsetTop - shift.y) >= (COORDS_Y.min - (window.MAIN_PIN_HEIGHT / 2 + window.MAIN_PIN_POINTER_HEIGHT)) && (mainPin.offsetTop - shift.y) <= (COORDS_Y.max - (window.MAIN_PIN_HEIGHT / 2 + window.MAIN_PIN_POINTER_HEIGHT))) {
+        if ((mainPin.offsetTop - shift.y) >= (COORDS_Y.min - (MAIN_PIN_HEIGHT / 2 + MAIN_PIN_POINTER_HEIGHT)) && (mainPin.offsetTop - shift.y) <= (COORDS_Y.max - (MAIN_PIN_HEIGHT / 2 + MAIN_PIN_POINTER_HEIGHT))) {
           mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
         }
 
         // Получение координат
         var finalCoords = {
           finalX: mainPin.offsetLeft,
-          finalY: Math.round(mainPin.offsetTop + window.MAIN_PIN_HEIGHT / 2 + window.MAIN_PIN_POINTER_HEIGHT)
+          finalY: Math.round(mainPin.offsetTop + MAIN_PIN_HEIGHT / 2 + MAIN_PIN_POINTER_HEIGHT)
         };
         document.querySelector('#address').value = 'x: ' + finalCoords.finalX + ', y: ' + finalCoords.finalY;
       };
@@ -61,7 +64,7 @@
   });
 
   mainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEYCODE) {
+    if (evt.keyCode === ENTER_KEYCODE) {
       window.map.activateMap();
     }
   });

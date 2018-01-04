@@ -3,6 +3,7 @@
 (function () {
   var PRICE_MIN = 10000;
   var PRICE_MAX = 50000;
+  var PIN_NUMBER = 5;
 
   var arrayCopy = [];
   var filterOption = {
@@ -56,7 +57,7 @@
     function (arr) {
       if (filterOption.rooms !== 'any') {
         arr = arr.filter(function (elem) {
-          return elem.offer.rooms === filterOption.rooms;
+          return elem.offer.rooms === parseInt(filterOption.rooms, 10);
         });
       }
       return arr;
@@ -65,7 +66,7 @@
     function (arr) {
       if (filterOption.guests !== 'any') {
         arr = arr.filter(function (elem) {
-          return elem.offer.guests === filterOption.guests;
+          return elem.offer.guests === parseInt(filterOption.guests, 10);
         });
       }
       return arr;
@@ -94,8 +95,8 @@
     filterFunctions.forEach(function (elem) {
       window.ads = elem(window.ads);
     });
-    if (window.ads.length > window.PIN_NUMBER) {
-      window.ads = window.ads.slice(0, window.PIN_NUMBER);
+    if (window.ads.length > PIN_NUMBER) {
+      window.ads = window.ads.slice(0, PIN_NUMBER);
     }
 
     window.debounce(window.map.appendPins);
@@ -110,7 +111,7 @@
   window.mapFilters = {
     cutData: function (data) {
       arrayCopy = data.slice();
-      window.ads = data.slice(0, window.PIN_NUMBER);
+      window.ads = data.slice(0, PIN_NUMBER);
     }
   };
 })();

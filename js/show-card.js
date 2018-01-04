@@ -1,10 +1,13 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+
   var mapPins = document.querySelector('.map__pins');
   // Закрытие окна на ESC
   var onPopupEscPress = function (evt) {
-    if (evt.keyCode === window.ESC_KEYCODE) {
+    if (evt.keyCode === ESC_KEYCODE) {
       closePopup();
     }
   };
@@ -56,7 +59,7 @@
   });
 
   mapPins.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEYCODE) {
+    if (evt.keyCode === ENTER_KEYCODE) {
       showCard(evt);
     }
   });

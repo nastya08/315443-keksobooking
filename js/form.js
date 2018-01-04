@@ -1,11 +1,17 @@
 'use strict';
 
 (function () {
+  var OFFER_TYPE_PRICE = {
+    flat: 1000,
+    bungalo: 0,
+    house: 5000,
+    palace: 10000,
+  };
+  var ARR_OFFER_CHECKS = ['12:00', '13:00', '14:00'];
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   // Форма
   var form = document.querySelector('.notice__form');
-  // Количество fieldset внутри формы
-  var NUMBERS_FIELDSET = document.querySelector('.notice__form').getElementsByTagName('FIELDSET').length;
-
   // Переменные
   var timeIn = form.querySelector('#timein');
   var timeOut = form.querySelector('#timeout');
@@ -16,18 +22,19 @@
   var capacity = form.querySelector('#capacity');
   var roomOptionsNumber = roomNumber.options.length;
   var address = form.querySelector('#address');
-  var offerTypePrice = {
-    flat: 1000,
-    bungalo: 0,
-    house: 5000,
-    palace: 10000,
-  };
+  var description = form.querySelector('#description');
+  var features = form.querySelectorAll('input[name="features"]');
+  var formFieldset = form.querySelectorAll('fieldset');
+  var avatarChooser = form.querySelector('.upload input[type=file]');
+  var photoChooser = form.querySelector('.form__photo-container input[type=file]');
+  var avatarUser = form.querySelector('.notice__preview img');
+  var uploadPhoto = form.querySelector('.form__photo-container');
 
   // Все поля формы при открытии страницы недоступны
   var disableFieldset = function () {
-    for (var i = 0; i < NUMBERS_FIELDSET; i++) {
-      form.querySelectorAll('fieldset')[i].disabled = true;
-    }
+    [].forEach.call(formFieldset, function (element) {
+      element.disabled = true;
+    });
   };
   disableFieldset();
 
@@ -35,16 +42,14 @@
     element.value = value;
   };
 
-  var arrOfferChecks = ['12:00', '13:00', '14:00'];
-
   // изменение времени выезда при изменении времени въезда
   var onSincTimeIn = function () {
-    window.synchronizeFields(timeIn, timeOut, arrOfferChecks, arrOfferChecks, syncValues);
+    window.synchronizeFields(timeIn, timeOut, ARR_OFFER_CHECKS, ARR_OFFER_CHECKS, syncValues);
   };
 
   // изменение времени въезда при изменении времени выезда
   var onSincTimeOut = function () {
-    window.synchronizeFields(timeOut, timeIn, arrOfferChecks, arrOfferChecks, syncValues);
+    window.synchronizeFields(timeOut, timeIn, ARR_OFFER_CHECKS, ARR_OFFER_CHECKS, syncValues);
   };
 
   var syncMinValues = function (element, value) {
@@ -131,7 +136,7 @@
   var onInvalidPrice = function () {
     addBorderColor(priceHome);
     if (priceHome.validity.rangeUnderflow) {
-      priceHome.setCustomValidity('Стоимость жилья должна быть не менее ' + offerTypePrice[typeHome.value] + ' руб');
+      priceHome.setCustomValidity('Стоимость жилья должна быть не менее ' + OFFER_TYPE_PRICE[typeHome.value] + ' руб');
     } else if (priceHome.validity.rangeOverflow) {
       priceHome.setCustomValidity('Стоимость жилья должна быть меньше или равна 1 000 000');
     } else if (priceHome.validity.valueMissing) {
@@ -147,6 +152,66 @@
     priceHome.setCustomValidity('');
   };
 
+  var resetForm = function () {
+    var childs = uploadPhoto.querySelectorAll('img');
+    [].forEach.call(childs, function (element) {
+      uploadPhoto.removeChild(element);
+    });
+    window.backend.removeError();
+    formTitle.value = '';
+    avatarUser.src = 'img/muffin.png';
+    formTitle.placeholder = 'Милая, уютная квартирка в центре Токио';
+    typeHome.value = 'flat';
+    priceHome.value = '1000';
+    timeIn.value = '12:00';
+    timeOut.value = '12:00';
+    roomNumber.value = '1';
+    capacity.value = '1';
+    [].forEach.call(capacity.options, function (element) {
+      element.classList.add('hidden');
+    });
+    description.value = '';
+    description.placeholder = 'Здесь расскажите о том, какое ваше жилье замечательное и вообще';
+    [].forEach.call(features, function (element) {
+      element.checked = false;
+    });
+    capacity.options[2].classList.remove('hidden');
+  };
+
+  var onFormSubmit = function (evt) {
+    window.backend.save(new FormData(form), resetForm, window.backend.onErrorSave);
+    evt.preventDefault();
+  };
+
+  var onChooserChange = function (evt) {
+    var fileChooser = evt.target;
+    var file = fileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        var result = reader.result;
+        switch (fileChooser) {
+          case avatarChooser:
+            avatarUser.src = result;
+            break;
+          case photoChooser:
+            var img = document.createElement('IMG');
+            img.width = '50';
+            img.height = '50';
+            uploadPhoto.appendChild(img);
+            img.src = result;
+            break;
+        }
+      });
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Синхронизация времени
   timeIn.addEventListener('change', onSincTimeIn);
   timeOut.addEventListener('change', onSincTimeOut);
@@ -160,6 +225,10 @@
   formTitle.addEventListener('focus', onFocusTitle);
   priceHome.addEventListener('invalid', onInvalidPrice);
   priceHome.addEventListener('change', onChangePrice);
+  // Загрузка изображений
+  avatarChooser.addEventListener('change', onChooserChange);
+  photoChooser.addEventListener('change', onChooserChange);
+  form.addEventListener('submit', onFormSubmit);
 
   window.form = {
     activateForm: function () {
@@ -167,9 +236,9 @@
     },
     // Все поля формы становятся доступными
     ableFieldset: function () {
-      for (var i = 0; i < NUMBERS_FIELDSET; i++) {
-        form.querySelectorAll('fieldset')[i].disabled = false;
-      }
+      [].forEach.call(formFieldset, function (element) {
+        element.disabled = false;
+      });
     }
   };
 })();
